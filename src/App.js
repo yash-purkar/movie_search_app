@@ -23,27 +23,31 @@ function App() {
   //   // getMovies(SEARCHAPI + e.target.value);
   // }
 
-  // const getMovies = async (api) => {
-  //   let response = await fetch(api);
-  //   let data = await response.json();
-  //   setMoviesData([data.results]);
+  const getMovies = async (api) => {
+    let response = await fetch(api);
+    let data = await response.json();
+    setMoviesData(data.results);
 
-  // }
+  }
 
   const handleSearchBtn = () => {
-    fetch(SEARCHAPI + searchValue)
-      .then((res) => res.json())
-      .then((data) => {
-        setMoviesData([]);
-        setMoviesData(data.results);
-        console.log(data)
-      });
+    if (searchValue) {
+
+      fetch(SEARCHAPI + searchValue)
+        .then((res) => res.json())
+        .then((data) => {
+          setMoviesData([]);
+          setMoviesData(data.results);
+          console.log(data)
+        });
+    }
+    else {
+      getMovies(APIURL)
+    }
   }
 
   useEffect(() => {
-    fetch(APIURL)
-      .then((res) => res.json())
-      .then((data) => setMoviesData(data.results));
+    getMovies(APIURL);
   }, [])
 
   return (
