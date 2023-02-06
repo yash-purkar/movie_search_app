@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Img from "./img.jpg";
 import "./App.css";
-import { computeHeadingLevel } from "@testing-library/react";
+import Img from './img.jpg'
 
 //IMP - It'll give most popular movies
 const APIURL = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=04c35731a5ee918f014970082a0088b1&page=1";
@@ -14,7 +13,32 @@ const SEARCHAPI = "https://api.themoviedb.org/3/search/movie?&api_key=04c35731a5
 
 function App() {
   const [moviesData, setMoviesData] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
 
+  // const handleChange = (e) => {
+  //   // console.log(e.target.value);
+  //   fetch(SEARCHAPI + e.target.value)
+  //     .then((res) => res.json())
+  //     .then((data) => console.log(data));
+  //   // getMovies(SEARCHAPI + e.target.value);
+  // }
+
+  // const getMovies = async (api) => {
+  //   let response = await fetch(api);
+  //   let data = await response.json();
+  //   setMoviesData([data.results]);
+
+  // }
+
+  const handleSearchBtn = () => {
+    fetch(SEARCHAPI + searchValue)
+      .then((res) => res.json())
+      .then((data) => {
+        setMoviesData([]);
+        setMoviesData(data.results);
+        console.log(data)
+      });
+  }
 
   useEffect(() => {
     fetch(APIURL)
@@ -26,14 +50,15 @@ function App() {
 
     <div className="main">
       <div className="searchBar">
-        <input type="search" id="search" autoFocus autoComplete="off" placeholder="Search Here" />
+        <input type="search" id="search" autoFocus autoComplete="off" placeholder="Search Here" onChange={(e) => setSearchValue(e.target.value)} />
+        <button onClick={handleSearchBtn}>Search</button>
       </div>
 
       {
-        moviesData.map((movie) => {
+        moviesData.map((movie, i) => {
           return (
-            <div className="box">
-              <img src={Img} alt="" id="img" />
+            <div className="box" key={i}>
+              <img src={movie.poster_path === null ? Img : IMGPATH + movie.poster_path} alt="img" id="img" />
               <div className="overlay">
                 <div className="title">
                   <h2>{movie.original_title}</h2>
