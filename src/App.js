@@ -14,14 +14,8 @@ const SEARCHAPI = "https://api.themoviedb.org/3/search/movie?&api_key=04c35731a5
 function App() {
   const [moviesData, setMoviesData] = useState([]);
   const [searchValue, setSearchValue] = useState("");
+  const [resultMsg, setResultMsg] = useState("")
 
-  // const handleChange = (e) => {
-  //   // console.log(e.target.value);
-  //   fetch(SEARCHAPI + e.target.value)
-  //     .then((res) => res.json())
-  //     .then((data) => console.log(data));
-  //   // getMovies(SEARCHAPI + e.target.value);
-  // }
 
   const getMovies = async (api) => {
     let response = await fetch(api);
@@ -32,17 +26,18 @@ function App() {
 
   const handleSearchBtn = () => {
     if (searchValue) {
-
       fetch(SEARCHAPI + searchValue)
         .then((res) => res.json())
         .then((data) => {
           setMoviesData([]);
           setMoviesData(data.results);
-          console.log(data)
+          // console.log(data);
+          setResultMsg("Results");
         });
     }
     else {
-      getMovies(APIURL)
+      getMovies(APIURL);
+      setResultMsg("");
     }
   }
 
@@ -53,35 +48,39 @@ function App() {
   return (
 
     <div className="main">
-      <div className="searchBar">
-        <input type="search" id="search" autoFocus autoComplete="off" placeholder="Search Here" onChange={(e) => setSearchValue(e.target.value)} />
-        <button onClick={handleSearchBtn}>Search</button>
+      <div className="nav">
+        <h1>Movie Search</h1>
+        <div className="searchBar">
+          <input type="search" id="search" autoFocus autoComplete="off" placeholder="Search Here" onChange={(e) => setSearchValue(e.target.value)} />
+          <button id="btn" onClick={handleSearchBtn}>Search</button>
+        </div>
       </div>
-
-      {
-        moviesData.map((movie, i) => {
-          return (
-            <div className="box" key={i}>
-              <img src={movie.poster_path === null ? Img : IMGPATH + movie.poster_path} alt="img" id="img" />
-              <div className="overlay">
+      <h2 id="resultMsg">{resultMsg}</h2>
+      <div className="container">
+        {
+          moviesData.map((movie, i) => {
+            return (
+              <div className="box" key={i}>
+                <img src={movie.poster_path === null ? Img : IMGPATH + movie.poster_path} alt="img" id="img" />
                 <div className="title">
-                  <h2>{movie.original_title}</h2>
-
-                  <span>{movie.vote_average}</span>
+                  <h2 id="movieName">{movie.original_title}</h2>
+                  <span id={movie.vote_average > 7 ? "green" : "red"}><span id="star">⭐</span>{movie.vote_average}</span>
                 </div>
-                <h3>Overview</h3>
-                <p>{movie.overview}</p>
+                <div className="overview">
+                  <h3 id="overviewHead">Overview</h3>
+                  <p>{movie.overview}</p>
 
+                </div>
               </div>
-            </div>
-          )
-        })
-      }
+            )
+          })
+        }
+
+
+      </div>
 
 
     </div>
-
-
   );
 }
 
