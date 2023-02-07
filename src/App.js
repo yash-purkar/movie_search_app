@@ -33,7 +33,6 @@ function App() {
 
   }
 
-  //TODO: ADD LODING TEXT AND THEN POST IT ON TWIITER AND LINKDIN
 
   const handleSearchBtn = () => {
     if (searchValue) {
