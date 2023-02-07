@@ -46,17 +46,21 @@ function App() {
         .then((res) => res.json())
         .then((data) => {
           setMoviesData([]);
+          let msg = data.results.length > 0 ? `Search results for ${searchValue}` : `No data found`;
+          console.log(data)
+          setResultMsg(msg);
           setTimeout(() => {
             setLoading(true);
+
           });
 
           setTimeout(() => {
             setMoviesData(data.results);
+
             setLoading(false);
           }, 2300);
           // console.log(data);
-          let msg = moviesData.length !== 20 ? `Search results for ${searchValue}` : `No data found`
-          setResultMsg(msg);
+
         });
     }
     else {
@@ -82,15 +86,15 @@ function App() {
           </div>
         </div>
 
-        {loading ? <p id="loader">
-          <div>
+        {loading ? <section id="loader">
+          <p>
             <span id="loading">Loading</span>
             <span id="dot1">.</span>
             <span id="dot2">.</span>
             <span id="dot3">.</span>
-          </div>
+          </p>
 
-        </p> : <><h2 id="resultMsg">{resultMsg}</h2><div className="container">
+        </section> : <><h2 id="resultMsg">{resultMsg}</h2><div className="container">
           {
             moviesData.map((movie, i) => {
               return (

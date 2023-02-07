@@ -143,6 +143,9 @@ p {
   align-items: center;
   justify-content: center;
   color: var(--primary);
+}
+
+#loader p {
   font-size: 160px;
 }
 
