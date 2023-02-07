@@ -68,7 +68,7 @@ function App() {
                 </div>
                 <div className="overview">
                   <h3 id="overviewHead">Overview</h3>
-                  <p>{movie.overview}</p>
+                  <p>{movie.overview.substring(1, 150)}....</p>
 
                 </div>
               </div>

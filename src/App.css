@@ -52,7 +52,7 @@
 }
 
 #resultMsg {
-  margin-bottom: 10px;
+  margin-bottom: 25px;
   text-align: center;
   color: var(--primary);
   font-size: 30px;
@@ -64,10 +64,13 @@
   margin: 20px;
   margin-top: 30px;
   width: 350px;
+  height: 600px;
+  overflow: hidden;
   border-top-right-radius: 1rem;
   border-top-left-radius: 1rem;
   border-radius: 1rem;
   background-color: #fff;
+  padding-bottom: 15px;
 }
 
 .box:hover {
