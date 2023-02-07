@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import Img from './img.jpg'
+import Movies from "./Compoents/Movies";
 
 //IMP - It'll give most popular movies
 const APIURL = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=04c35731a5ee918f014970082a0088b1&page=1";
@@ -14,25 +14,45 @@ const SEARCHAPI = "https://api.themoviedb.org/3/search/movie?&api_key=04c35731a5
 function App() {
   const [moviesData, setMoviesData] = useState([]);
   const [searchValue, setSearchValue] = useState("");
-  const [resultMsg, setResultMsg] = useState("")
+  const [resultMsg, setResultMsg] = useState("");
+  const [loading, setLoading] = useState(true);
 
 
   const getMovies = async (api) => {
     let response = await fetch(api);
     let data = await response.json();
-    setMoviesData(data.results);
+    setTimeout(() => {
+      setLoading(true);
+    });
+    setTimeout(() => {
+      setMoviesData(data.results);
+      setLoading(false);
+    }, 2000);
 
   }
 
+  //TODO: ADD LODING TEXT AND THEN POST IT ON TWIITER AND LINKDIN
+
   const handleSearchBtn = () => {
     if (searchValue) {
+      setTimeout(() => {
+        setLoading(true);
+      });
+
       fetch(SEARCHAPI + searchValue)
         .then((res) => res.json())
         .then((data) => {
           setMoviesData([]);
-          setMoviesData(data.results);
+          setTimeout(() => {
+            setLoading(true);
+          });
+
+          setTimeout(() => {
+            setMoviesData(data.results);
+            setLoading(false);
+          }, 2000);
           // console.log(data);
-          setResultMsg("Results");
+          setResultMsg(`Search results for ${searchValue}`);
         });
     }
     else {
@@ -44,43 +64,43 @@ function App() {
   useEffect(() => {
     getMovies(APIURL);
   }, [])
+  // console.log(moviesData);
 
   return (
 
-    <div className="main">
-      <div className="nav">
-        <h1>Movie Search</h1>
-        <div className="searchBar">
-          <input type="search" id="search" autoFocus autoComplete="off" placeholder="Search Here" onChange={(e) => setSearchValue(e.target.value)} />
-          <button id="btn" onClick={handleSearchBtn}>Search</button>
+    <>
+      <div className="main">
+        <div className="nav">
+          <h1>Movies</h1>
+          <div className="searchBar">
+            <input type="search" id="search" autoFocus autoComplete="off" placeholder="Search Here" onChange={(e) => setSearchValue(e.target.value)} />
+            <button id="btn" onClick={handleSearchBtn}>Search</button>
+          </div>
         </div>
-      </div>
-      <h2 id="resultMsg">{resultMsg}</h2>
-      <div className="container">
-        {
-          moviesData.map((movie, i) => {
-            return (
-              <div className="box" key={i}>
-                <img src={movie.poster_path === null ? Img : IMGPATH + movie.poster_path} alt="img" id="img" />
-                <div className="title">
-                  <h2 id="movieName">{movie.original_title}</h2>
-                  <span id={movie.vote_average > 7 ? "green" : "red"}><span id="star">⭐</span>{movie.vote_average}</span>
-                </div>
-                <div className="overview">
-                  <h3 id="overviewHead">Overview</h3>
-                  <p>{movie.overview.substring(1, 150)}....</p>
 
-                </div>
-              </div>
-            )
-          })
-        }
+        {loading ? <p id="loader">
+          <div>
+            <span id="loading">Loading</span>
+            <span id="dot1">.</span>
+            <span id="dot2">.</span>
+            <span id="dot3">.</span>
+          </div>
+
+        </p> : <><h2 id="resultMsg">{resultMsg}</h2><div className="container">
+          {
+            moviesData.map((movie, i) => {
+              return (
+                <Movies key={i} moviesData={movie} imgUrl={IMGPATH} />
+              )
+            })
+          }
+
+        </div></>}
 
 
       </div>
 
-
-    </div>
+    </>
   );
 }
 
