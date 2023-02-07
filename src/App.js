@@ -19,6 +19,8 @@ function App() {
 
 
   const getMovies = async (api) => {
+    setResultMsg("");
+    setSearchValue("")
     let response = await fetch(api);
     let data = await response.json();
     setTimeout(() => {
@@ -27,13 +29,14 @@ function App() {
     setTimeout(() => {
       setMoviesData(data.results);
       setLoading(false);
-    }, 2000);
+    }, 2300);
 
   }
 
   //TODO: ADD LODING TEXT AND THEN POST IT ON TWIITER AND LINKDIN
 
   const handleSearchBtn = () => {
+    setMoviesData([]);
     if (searchValue) {
       setTimeout(() => {
         setLoading(true);
@@ -50,9 +53,10 @@ function App() {
           setTimeout(() => {
             setMoviesData(data.results);
             setLoading(false);
-          }, 2000);
+          }, 2300);
           // console.log(data);
-          setResultMsg(`Search results for ${searchValue}`);
+          let msg = moviesData.length !== 20 ? `Search results for ${searchValue}` : `No data found`
+          setResultMsg(msg);
         });
     }
     else {
@@ -64,7 +68,7 @@ function App() {
   useEffect(() => {
     getMovies(APIURL);
   }, [])
-  // console.log(moviesData);
+  console.log(moviesData);
 
   return (
 
@@ -73,7 +77,7 @@ function App() {
         <div className="nav">
           <h1>Movies</h1>
           <div className="searchBar">
-            <input type="search" id="search" autoFocus autoComplete="off" placeholder="Search Here" onChange={(e) => setSearchValue(e.target.value)} />
+            <input type="search" id="search" autoFocus autoComplete="off" placeholder="Search Here" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
             <button id="btn" onClick={handleSearchBtn}>Search</button>
           </div>
         </div>
@@ -90,8 +94,11 @@ function App() {
           {
             moviesData.map((movie, i) => {
               return (
-                <Movies key={i} moviesData={movie} imgUrl={IMGPATH} />
-              )
+                <>{
+                  moviesData ? <Movies key={i} moviesData={movie} imgUrl={IMGPATH} />
+                    : console.log("NO data found")}
+
+                </>)
             })
           }
 

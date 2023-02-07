@@ -16,7 +16,6 @@ function Movies({ moviesData, imgUrl }) {
       <div className="overview">
         <h3 id="overviewHead">Overview</h3>
         <p>{overview.substring(1, 150)}....</p>
-
       </div>
     </div >
   )
