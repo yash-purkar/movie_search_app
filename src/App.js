@@ -36,7 +36,6 @@ function App() {
   //TODO: ADD LODING TEXT AND THEN POST IT ON TWIITER AND LINKDIN
 
   const handleSearchBtn = () => {
-    setMoviesData([]);
     if (searchValue) {
       setTimeout(() => {
         setLoading(true);
